@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  # Medusa Backend Service
+  backend:
+    build:
+      context: ./ecommerce-template
+      dockerfile: Dockerfile
+    restart: always
+    container_name: medusa_backend
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgres://postgres:postgres@database:5432/medusa
+      REDIS_URL: redis://redis:6379
+      STORE_CORS: http://localhost:8000,http://localhost:3000
+      ADMIN_CORS: http://localhost:7001,http://localhost:3000
+      AUTH_CORS: http://localhost:8000,http://localhost:3000
+      JWT_SECRET: supersecret
+      COOKIE_SECRET: supersecret
+    networks:
+      - ecommerce-network
+    depends_on:
+      - database
+      - redis
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./ecommerce-template:/app
+      - /app/node_modules
+
+  # Next.js Storefront Service
+  storefront:
+    build:
+      context: ./ecommerce-template-storefront
+      dockerfile: Dockerfile
+    restart: always
+    container_name: medusa_storefront
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_MEDUSA_BACKEND_URL: http://localhost:9000
+      NEXT_PUBLIC_BASE_URL: http://localhost:8000
+    networks:
+      - ecommerce-network
+    depends_on:
+      - backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./ecommerce-template-storefront:/app
+      - /app/node_modules
+      - /app/.next
+
+  # PostgreSQL Database
+  database:
+    image: postgres:16
+    container_name: medusa_postgres
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: medusa
+    ports:
+      - "5432:5432"
+    networks:
+      - ecommerce-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: medusa_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - ecommerce-network
+    volumes:
+      - redis-data:/data
+
+networks:
+  ecommerce-network:
+    name: ecommerce-network
+    driver: bridge
+
+volumes:
+  postgres-data:
+  redis-data:
