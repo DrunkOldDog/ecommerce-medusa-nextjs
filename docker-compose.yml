@@ -37,8 +37,9 @@ services:
     container_name: medusa_storefront
     environment:
       NODE_ENV: development
-      NEXT_PUBLIC_MEDUSA_BACKEND_URL: http://localhost:9000
+      MEDUSA_BACKEND_URL: http://backend:9000
       NEXT_PUBLIC_BASE_URL: http://localhost:8000
+      NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: pk_b69aa789bf1dce400713fe12689d6c55c23573ec26ed030931a03f7efc30d841
     networks:
       - ecommerce-network
     depends_on:

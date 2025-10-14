@@ -1,0 +1,5 @@
+### Get collections
+
+GET http://localhost:9000/store/collections
+headers:
+x-publishable-api-key: pk_b69aa789bf1dce400713fe12689d6c55c23573ec26ed030931a03f7efc30d841
