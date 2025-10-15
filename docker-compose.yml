@@ -28,6 +28,27 @@ services:
       - ./ecommerce-template:/app
       - /app/node_modules
 
+  # Payload CMS Service
+  payload:
+    build:
+      context: ./ecommerce-template-cms
+      dockerfile: Dockerfile
+    restart: always
+    container_name: medusa_cms
+    environment:
+      DATABASE_URI: postgres://postgres:postgres@database:5432/payload
+      PAYLOAD_SECRET: 2b464b4a36b3b3bb8c904a32
+      NODE_ENV: development
+    networks:
+      - ecommerce-network
+    depends_on:
+      - database
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./ecommerce-template-cms:/app
+      - /app/node_modules
+
   # Next.js Storefront Service
   storefront:
     build:
