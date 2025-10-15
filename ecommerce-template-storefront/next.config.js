@@ -7,6 +7,7 @@ checkEnvVariables()
  */
 const S3_HOSTNAME = process.env.MEDUSA_CLOUD_S3_HOSTNAME
 const S3_PATHNAME = process.env.MEDUSA_CLOUD_S3_PATHNAME
+const BACKEND_CONTAINER_NAME = process.env.NEXT_PUBLIC_BACKEND_CONTAINER_NAME || "backend";
 
 /**
  * @type {import('next').NextConfig}
@@ -29,6 +30,10 @@ const nextConfig = {
       {
         protocol: "http",
         hostname: "localhost",
+      },
+      {
+        protocol: "http",
+        hostname: BACKEND_CONTAINER_NAME,
       },
       {
         protocol: "https",

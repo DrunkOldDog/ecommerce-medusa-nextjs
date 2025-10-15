@@ -50,9 +50,19 @@ const ImageOrPlaceholder = ({
   image,
   size,
 }: Pick<ThumbnailProps, "size"> & { image?: string }) => {
+  const parseImageUrl = (image: string) => {
+    if (image.includes("localhost")) {
+      return image.replace(
+        "localhost",
+        process.env.NEXT_PUBLIC_BACKEND_CONTAINER_NAME || "backend"
+      )
+    }
+    return image
+  }
+
   return image ? (
     <Image
-      src={image}
+      src={parseImageUrl(image)}
       alt="Thumbnail"
       className="absolute inset-0 object-cover object-center"
       draggable={false}
