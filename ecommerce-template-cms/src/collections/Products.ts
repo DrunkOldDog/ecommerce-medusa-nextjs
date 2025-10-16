@@ -307,6 +307,7 @@ export const Products: CollectionConfig = {
   access: {
     read: () => true,
     create: ({ req }) => !!req.query.is_from_medusa,
+    update: ({ req }) => !!req.query.is_from_medusa,
     delete: ({ req }) => !!req.query.is_from_medusa,
   },
 }
