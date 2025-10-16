@@ -3,3 +3,9 @@
 GET http://localhost:9000/store/collections
 headers:
 x-publishable-api-key: pk_b69aa789bf1dce400713fe12689d6c55c23573ec26ed030931a03f7efc30d841
+
+### Get products
+
+GET http://localhost:3000/api/products
+content-type: application/json
+Authorization: users API-Key cc946fdd-35f9-4fb5-8a0d-3bb438cbeb2a

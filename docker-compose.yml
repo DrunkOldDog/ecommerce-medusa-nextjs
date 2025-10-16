@@ -18,7 +18,7 @@ services:
       JWT_SECRET: supersecret
       COOKIE_SECRET: supersecret
       PAYLOAD_SERVER_URL: http://payload:3000
-      PAYLOAD_API_KEY: beccd9a6-5def-4c84-a63a-994c66046db3
+      PAYLOAD_API_KEY: cc946fdd-35f9-4fb5-8a0d-3bb438cbeb2a
       PAYLOAD_USER_COLLECTION: users
     networks:
       - ecommerce-network
