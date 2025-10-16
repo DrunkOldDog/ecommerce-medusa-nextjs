@@ -1,14 +1,13 @@
 import type { StoreProductWithPayload } from "../../types/global"
 
 export function getProductImages(product: StoreProductWithPayload) {
-  return (
+  const payloadImages =
     product?.payload_product?.images?.map((image) => ({
       id: image.id,
       url: formatPayloadImageUrl(image.image.url),
-    })) ||
-    product.images ||
-    []
-  )
+    })) || []
+
+  return payloadImages.length > 0 ? payloadImages : product.images || []
 }
 
 export function formatPayloadImageUrl(url: string): string {

@@ -21,7 +21,10 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
             >
               {!!image.url && (
                 <Image
-                  src={image.url}
+                  src={image.url.replace(
+                    "localhost",
+                    process.env.NEXT_PUBLIC_BACKEND_CONTAINER_NAME || "backend"
+                  )}
                   priority={index <= 2 ? true : false}
                   className="absolute inset-0 rounded-rounded"
                   alt={`Product image ${index + 1}`}
