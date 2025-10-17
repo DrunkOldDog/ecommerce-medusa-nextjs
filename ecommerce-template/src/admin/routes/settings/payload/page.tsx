@@ -4,20 +4,20 @@ import { useState } from "react";
 import { sdk } from "../../../lib/sdk";
 
 const PayloadSettingsPage = () => {
-  const [isSyncingProductsToPayload, setIsSyncingProductsToPayload] =
+  const [isSyncingCollectionsToPayload, setIsSyncingCollectionsToPayload] =
     useState(false);
 
-  const syncProductsToPayload = async (collection: string) => {
+  const syncCollectionToPayload = async (collection: string) => {
     try {
-      setIsSyncingProductsToPayload(true);
+      setIsSyncingCollectionsToPayload(true);
       await sdk.client.fetch(`/admin/payload/sync/${collection}`, {
         method: "POST",
       });
-      toast.success(`Triggered syncing collection data with Payload`);
+      toast.success(`Triggered syncing ${collection} data with Payload`);
     } catch (error) {
-      toast.error(`Failed to trigger syncing collection data with Payload`);
+      toast.error(`Failed to trigger syncing ${collection} data with Payload`);
     } finally {
-      setIsSyncingProductsToPayload(false);
+      setIsSyncingCollectionsToPayload(false);
     }
   };
 
@@ -31,13 +31,24 @@ const PayloadSettingsPage = () => {
           This page allows you to trigger syncing your Medusa data with Payload.
           It will only create items not in Payload.
         </p>
-        <Button
-          variant="primary"
-          onClick={() => syncProductsToPayload("products")}
-          isLoading={isSyncingProductsToPayload}
-        >
-          Sync Products to Payload
-        </Button>
+
+        <div className="flex gap-4">
+          <Button
+            variant="primary"
+            onClick={() => syncCollectionToPayload("products")}
+            isLoading={isSyncingCollectionsToPayload}
+          >
+            Sync Products to Payload
+          </Button>
+
+          <Button
+            variant="primary"
+            onClick={() => syncCollectionToPayload("collections")}
+            isLoading={isSyncingCollectionsToPayload}
+          >
+            Sync Collections to Payload
+          </Button>
+        </div>
       </div>
     </Container>
   );

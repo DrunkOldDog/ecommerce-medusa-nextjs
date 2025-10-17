@@ -4,7 +4,6 @@ import { createPayloadProductsWorkflow } from "../workflows/create-payload-produ
 export default async function productSyncPayloadHandler({
   container,
 }: SubscriberArgs) {
-  console.log("Subscribing to products.sync-payload event");
   const query = container.resolve("query");
 
   const limit = 1000;
