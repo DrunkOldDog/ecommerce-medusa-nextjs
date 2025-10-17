@@ -1,5 +1,6 @@
 import { MedusaError } from "@medusajs/framework/utils";
 import qs from "qs";
+import { PayloadCollectionManager } from "./PayloadCollectionManager.class";
 
 import type {
   PayloadModuleOptions,
@@ -10,6 +11,8 @@ import type {
   PayloadApiResponse,
   PayloadBulkResult,
 } from "./payload.types";
+import type { PayloadCollectionFilter } from "./PayloadCollectionManager.class";
+
 
 type InjectedDependencies = {
   // inject any dependencies you need here
@@ -179,11 +182,13 @@ export default class PayloadModuleService {
     return result;
   }
 
-  async list(filter: { product_id: string | string[] }) {
-    const collection = filter.product_id ? "products" : "unknown";
-    const ids = Array.isArray(filter.product_id)
-      ? filter.product_id
-      : [filter.product_id];
+  async list(filter: PayloadCollectionFilter) {
+    const collectionManager = new PayloadCollectionManager(filter);
+
+    const ids = collectionManager.getCollectionIds();
+    const filterKey = collectionManager.getFilterKey();
+    const collection = collectionManager.getCollectionName();
+
     const result = await this.find(collection, {
       where: {
         medusa_id: {
@@ -195,7 +200,7 @@ export default class PayloadModuleService {
 
     return result.docs.map((doc) => ({
       ...doc,
-      product_id: doc.medusa_id,
+      [filterKey]: doc.medusa_id,
     }));
   }
 }
