@@ -32,7 +32,9 @@ export default async function Home(props: {
 
   return (
     <>
-      <Hero />
+      <div className="-mt-16">
+        <Hero />
+      </div>
 
       <div>
         {/* <ul className="flex flex-col gap-x-6">

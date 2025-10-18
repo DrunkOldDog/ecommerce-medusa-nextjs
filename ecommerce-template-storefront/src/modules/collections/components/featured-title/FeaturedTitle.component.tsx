@@ -26,7 +26,7 @@ export default function FeaturedTitle() {
       variants={scrollVariants}
       style={{ fontFamily: oswald.style.fontFamily }}
       animate="loop"
-      className="flex h-full w-full items-center justify-center align-middle gap-8 whitespace-nowrap px-8 text-6xl"
+      className="flex h-full w-full items-center justify-center align-middle gap-8 whitespace-nowrap px-8 py-1 text-6xl"
     >
       {Array.from({ length: 20 }).map((_, index) => (
         <div key={`header-item-${index}`} className="flex gap-4">
