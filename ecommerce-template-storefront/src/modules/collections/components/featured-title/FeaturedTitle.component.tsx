@@ -48,7 +48,6 @@ export default function FeaturedTitle() {
     <div className="relative w-full overflow-hidden">
       <ScrollItem />
       {/* <ScrollItem /> */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/30 via-transparent via-transparent to-white/30"></div>
     </div>
   )
 }
