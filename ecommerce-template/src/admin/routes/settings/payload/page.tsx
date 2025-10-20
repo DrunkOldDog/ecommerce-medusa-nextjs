@@ -48,6 +48,14 @@ const PayloadSettingsPage = () => {
           >
             Sync Collections to Payload
           </Button>
+
+          <Button
+            variant="primary"
+            onClick={() => syncCollectionToPayload("categories")}
+            isLoading={isSyncingCollectionsToPayload}
+          >
+            Sync Categories to Payload
+          </Button>
         </div>
       </div>
     </Container>

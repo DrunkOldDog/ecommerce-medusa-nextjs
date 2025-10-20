@@ -1,6 +1,7 @@
 export enum PayloadCollectionFilterKeys {
   COLLECTION_ID = "collection_id",
   PRODUCT_ID = "product_id",
+  CATEGORY_ID = "category_id",
 }
 
 export type PayloadCollectionFilter = Record<
@@ -22,6 +23,8 @@ export class PayloadCollectionManager {
       return PayloadCollectionFilterKeys.COLLECTION_ID;
     } else if (PayloadCollectionFilterKeys.PRODUCT_ID in collectionMap) {
       return PayloadCollectionFilterKeys.PRODUCT_ID;
+    } else if (PayloadCollectionFilterKeys.CATEGORY_ID in collectionMap) {
+      return PayloadCollectionFilterKeys.CATEGORY_ID;
     }
 
     throw new Error("Invalid filter key.");
@@ -36,6 +39,8 @@ export class PayloadCollectionManager {
       return "collections";
     } else if (this.filterKey === PayloadCollectionFilterKeys.PRODUCT_ID) {
       return "products";
+    } else if (this.filterKey === PayloadCollectionFilterKeys.CATEGORY_ID) {
+      return "categories";
     }
 
     return "unknown";

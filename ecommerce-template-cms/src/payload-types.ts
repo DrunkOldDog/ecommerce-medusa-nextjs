@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     products: Product;
     collections: Collection;
+    categories: Category;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -81,6 +82,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     collections: CollectionsSelect<false> | CollectionsSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -347,6 +349,76 @@ export interface Collection {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  /**
+   * The unique identifier from Medusa
+   */
+  medusa_id: string;
+  /**
+   * The category title
+   */
+  title: string;
+  /**
+   * URL-friendly unique identifier
+   */
+  handle: string;
+  /**
+   * Category description
+   */
+  description?: string | null;
+  /**
+   * Whether this category is active and visible
+   */
+  is_active?: boolean | null;
+  /**
+   * Whether this category is internal (only visible to admins)
+   */
+  is_internal?: boolean | null;
+  /**
+   * The ranking of the category among sibling categories
+   */
+  rank?: number | null;
+  /**
+   * Materialized path for efficient hierarchical queries
+   */
+  mpath?: string | null;
+  /**
+   * Gallery of category images
+   */
+  images?:
+    | {
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * SEO-related fields for better search visibility
+   */
+  seo?: {
+    meta_title?: string | null;
+    meta_description?: string | null;
+    meta_keywords?: string | null;
+  };
+  /**
+   * Custom metadata for the category
+   */
+  metadata?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -367,6 +439,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'collections';
         value: number | Collection;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: number | Category;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -546,6 +622,36 @@ export interface CollectionsSelect<T extends boolean = true> {
   handle?: T;
   description?: T;
   thumbnail?: T;
+  images?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  seo?:
+    | T
+    | {
+        meta_title?: T;
+        meta_description?: T;
+        meta_keywords?: T;
+      };
+  metadata?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  medusa_id?: T;
+  title?: T;
+  handle?: T;
+  description?: T;
+  is_active?: T;
+  is_internal?: T;
+  rank?: T;
+  mpath?: T;
   images?:
     | T
     | {
