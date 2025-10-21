@@ -1,13 +1,18 @@
 import { Heading, Text } from "@medusajs/ui"
-
-import type { HttpTypes } from "@medusajs/types"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import Image from "next/image"
 
+import type { PayloadCollection } from "types/collection.types"
+
+interface FeaturedCollectionGridProps {
+  collections: PayloadCollection[]
+}
+
 export default async function FeaturedCollectionGrid({
-  collections,
-}: {
-  collections: HttpTypes.StoreCollection[]
-}) {
+  collections: defaultCollections,
+}: FeaturedCollectionGridProps) {
+  const collections = defaultCollections.slice(0, 3)
+
   return (
     <div className="content-container">
       <div className="mb-6">
@@ -23,39 +28,24 @@ export default async function FeaturedCollectionGrid({
         {collections.map((collection, index) => {
           const isFirst = index === 0
 
-          // Fallback images array (same as MotionImageGallery)
-          const fallbackImages = [
-            "http://localhost:9000/static/1760580823373-3311210921_OFF_WHITE_REMERA_MAGAZINE_1620.webp",
-            "http://localhost:9000/static/1760834205954-img_0967-cf2e60962467a7cbab17594162762155-1024-1024.jpg",
-            "http://localhost:9000/static/1760834280081-NP_BUSINESS_ECOMM4350copia_b4b72f30-8109-444c-983c-c5c05f7dc9cf_1000x.webp",
-          ]
-
-          const getImageUrl = (image: string) => {
-            return image.replace(
-              "localhost",
-              process.env.NEXT_PUBLIC_BACKEND_CONTAINER_NAME || "backend"
-            )
-          }
-
-          const imageUrl = getImageUrl(
-            fallbackImages[index] || fallbackImages[0]
-          )
-
           return (
-            <div
+            <LocalizedClientLink
+              href={`/collections/${collection.handle}`}
               key={collection.id}
               className={`
                   ${isFirst ? "row-span-2" : ""} 
                   relative rounded-lg overflow-hidden group cursor-pointer
                 `}
             >
-              <Image
-                src={imageUrl}
-                alt={collection.title}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
+              {collection.thumbnail && (
+                <Image
+                  src={collection.thumbnail.url}
+                  alt={collection.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              )}
 
               {/* Overlay for better text readability */}
               <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition-all duration-300" />
@@ -74,7 +64,7 @@ export default async function FeaturedCollectionGrid({
                   {collection.title}
                 </Heading>
               </div>
-            </div>
+            </LocalizedClientLink>
           )
         })}
       </div>

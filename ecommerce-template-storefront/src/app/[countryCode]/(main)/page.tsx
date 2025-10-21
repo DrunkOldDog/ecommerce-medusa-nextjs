@@ -2,12 +2,12 @@ import { Metadata } from "next"
 
 import FeaturedCollectionGrid from "@modules/home/components/featured-collection-grid"
 import Hero from "@modules/home/components/hero"
-import { listCollections } from "@lib/data/collections"
-import { getRegion } from "@lib/data/regions"
+import { getPayloadCollections } from "@lib/data/collections"
 import { MotionImageGallery } from "@modules/products/components/motion-image-gallery"
 import FeaturedTitle from "@modules/collections/components/featured-title/FeaturedTitle.component"
 import ProductCategories from "@modules/home/components/product-categories"
 import { getPayloadCategories } from "@lib/data/categories"
+import { PayloadCollection } from "types/collection.types"
 
 export const metadata: Metadata = {
   title: "Medusa Next.js Starter Template",
@@ -15,26 +15,24 @@ export const metadata: Metadata = {
     "A performant frontend ecommerce starter template with Next.js 15 and Medusa.",
 }
 
-export default async function Home(props: {
-  params: Promise<{ countryCode: string }>
-}) {
-  const params = await props.params
-
-  const { countryCode } = params
-
-  const region = await getRegion(countryCode)
-
-  const { collections } = await listCollections({
-    fields: "id, handle, title, thumbnail",
-  })
-
+export default async function Home() {
   const productCategories = await getPayloadCategories()
+  const payloadCollections = await getPayloadCollections()
 
-  if (!collections || !region) {
-    return null
-  }
-
-  const parsedCollections = [collections[0], collections[2], collections[3]]
+  const { collections } = payloadCollections.reduce(
+    (acc, collection) => {
+      if (collection.featured) {
+        acc.featuredCollection = collection
+      } else {
+        acc.collections.push(collection)
+      }
+      return acc
+    },
+    {
+      featuredCollection: {} as PayloadCollection,
+      collections: [] as PayloadCollection[],
+    }
+  )
 
   return (
     <>
@@ -73,7 +71,7 @@ export default async function Home(props: {
         </div>
 
         <ul className="flex flex-col gap-y-16">
-          <FeaturedCollectionGrid collections={parsedCollections} />
+          <FeaturedCollectionGrid collections={collections} />
 
           <ProductCategories categories={productCategories} />
         </ul>
