@@ -83,6 +83,9 @@ export const Categories: CollectionConfig = {
       admin: {
         description: 'The ranking of the category among sibling categories',
       },
+      access: {
+        update: ({ req }) => !!req.query.is_from_medusa,
+      }
     },
     {
       name: 'mpath',
@@ -106,7 +109,7 @@ export const Categories: CollectionConfig = {
         {
           name: 'image',
           type: 'upload',
-          relationTo: 'media' as any,
+          relationTo: 'media',
           required: true,
         },
       ],
