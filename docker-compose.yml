@@ -65,10 +65,14 @@ services:
       NEXT_PUBLIC_BASE_URL: http://localhost:8000
       NEXT_PUBLIC_BACKEND_CONTAINER_NAME: backend
       NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: pk_b69aa789bf1dce400713fe12689d6c55c23573ec26ed030931a03f7efc30d841
+      NEXT_PUBLIC_PAYLOAD_SERVER_URL: http://payload:3000
+      PAYLOAD_API_KEY: cc946fdd-35f9-4fb5-8a0d-3bb438cbeb2a
+      PAYLOAD_USER_COLLECTION: users
     networks:
       - ecommerce-network
     depends_on:
       - backend
+      - payload
     ports:
       - "8000:8000"
     volumes:
