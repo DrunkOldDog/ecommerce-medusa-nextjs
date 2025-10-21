@@ -65,6 +65,9 @@ export const Categories: CollectionConfig = {
       admin: {
         description: 'Whether this category is active and visible',
       },
+      access: {
+        update: ({ req }) => !!req.query.is_from_medusa,
+      }
     },
     {
       name: 'is_internal',
@@ -74,6 +77,9 @@ export const Categories: CollectionConfig = {
       admin: {
         description: 'Whether this category is internal (only visible to admins)',
       },
+      access: {
+        update: ({ req }) => !!req.query.is_from_medusa,
+      }
     },
     {
       name: 'rank',

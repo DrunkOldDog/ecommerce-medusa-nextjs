@@ -58,6 +58,40 @@ export const Collections: CollectionConfig = {
       },
     },
     {
+      name: 'featured',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'Whether this collection is featured',
+      },
+      validate: async (value: any, { req, data }) => {
+        if (value) {
+          // Check if there's already a featured collection
+          const existingFeatured = await req.payload.find({
+            collection: 'collections',
+            where: {
+              featured: {
+                equals: true,
+              },
+            },
+            limit: 1,
+          })
+          
+          // If there's already a featured collection, prevent setting another one as featured
+          if (existingFeatured.docs.length > 0) {
+            const currentFeatured = existingFeatured.docs[0]
+            if (currentFeatured.id === (data as any).id) {
+              return true
+            }
+
+            return `Only one collection can be featured at a time. The current featured collection is ${currentFeatured.title}`
+          }
+        }
+
+        return true
+      },
+    },
+    {
       name: 'thumbnail',
       type: 'upload',
       relationTo: 'media' as any,

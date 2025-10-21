@@ -312,6 +312,10 @@ export interface Collection {
    */
   description?: string | null;
   /**
+   * Whether this collection is featured
+   */
+  featured?: boolean | null;
+  /**
    * Collection thumbnail image
    */
   thumbnail?: (number | null) | Media;
@@ -621,6 +625,7 @@ export interface CollectionsSelect<T extends boolean = true> {
   title?: T;
   handle?: T;
   description?: T;
+  featured?: T;
   thumbnail?: T;
   images?:
     | T
