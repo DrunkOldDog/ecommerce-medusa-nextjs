@@ -25,6 +25,11 @@ export type StoreFreeShippingPrice = StorePrice & {
   remaining_percentage: number
 }
 
+export type PayloadImage = {
+  id: number
+  url: string
+}
+
 export type StoreProductWithPayload = StoreProduct & {
   payload_product?: {
     medusa_id: string
@@ -32,16 +37,10 @@ export type StoreProductWithPayload = StoreProduct & {
     handle: string
     subtitle?: string
     description?: SerializedEditorState
-    thumbnail?: {
-      id: string
-      url: string
-    }
+    thumbnail?: PayloadImage
     images: {
       id: string
-      image: {
-        id: string
-        url: string
-      }
+      image: PayloadImage
     }[]
     options: {
       medusa_id: string

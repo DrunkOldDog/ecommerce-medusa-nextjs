@@ -7,6 +7,7 @@ import { getRegion } from "@lib/data/regions"
 import { MotionImageGallery } from "@modules/products/components/motion-image-gallery"
 import FeaturedTitle from "@modules/collections/components/featured-title/FeaturedTitle.component"
 import ProductCategories from "@modules/home/components/product-categories"
+import { getPayloadCategories } from "@lib/data/categories"
 
 export const metadata: Metadata = {
   title: "Medusa Next.js Starter Template",
@@ -26,6 +27,8 @@ export default async function Home(props: {
   const { collections } = await listCollections({
     fields: "id, handle, title, thumbnail",
   })
+
+  const productCategories = await getPayloadCategories()
 
   if (!collections || !region) {
     return null
@@ -72,7 +75,7 @@ export default async function Home(props: {
         <ul className="flex flex-col gap-y-16">
           <FeaturedCollectionGrid collections={parsedCollections} />
 
-          <ProductCategories />
+          <ProductCategories categories={productCategories} />
         </ul>
       </div>
     </>
