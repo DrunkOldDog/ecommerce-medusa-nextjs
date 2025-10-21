@@ -23,8 +23,9 @@ export default async function Footer() {
               Medusa Store
             </LocalizedClientLink>
             <Text className="text-gray-400 text-sm max-w-md">
-              Your premium destination for quality fashion and lifestyle products. 
-              Discover our curated collections and exclusive merchandise.
+              Your premium destination for quality fashion and lifestyle
+              products. Discover our curated collections and exclusive
+              merchandise.
             </Text>
           </div>
           <div className="text-small-regular gap-8 md:gap-x-12 grid grid-cols-2 sm:grid-cols-3">
@@ -92,12 +93,9 @@ export default async function Footer() {
                   Collections
                 </span>
                 <ul
-                  className={clx(
-                    "grid grid-cols-1 gap-2 text-gray-400",
-                    {
-                      "grid-cols-2": (collections?.length || 0) > 3,
-                    }
-                  )}
+                  className={clx("grid grid-cols-1 gap-2 text-gray-400", {
+                    "grid-cols-2": (collections?.length || 0) > 3,
+                  })}
                 >
                   {collections?.slice(0, 6).map((c) => (
                     <li key={c.id}>
@@ -113,11 +111,13 @@ export default async function Footer() {
               </div>
             )}
             <div className="flex flex-col gap-y-3">
-              <span className="text-gray-600 font-semibold text-sm uppercase tracking-wide">Company</span>
+              <span className="text-gray-600 font-semibold text-sm uppercase tracking-wide">
+                Company
+              </span>
               <ul className="grid grid-cols-1 gap-y-2 text-gray-400">
                 <li>
                   <a
-                    href="https://github.com/medusajs"
+                    href="https://github.com/DrunkOldDog"
                     target="_blank"
                     rel="noreferrer"
                     className="hover:text-gray-600 transition-colors"
@@ -127,17 +127,7 @@ export default async function Footer() {
                 </li>
                 <li>
                   <a
-                    href="https://docs.medusajs.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:text-gray-600 transition-colors"
-                  >
-                    Documentation
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://github.com/medusajs/nextjs-starter-medusa"
+                    href="https://github.com/DrunkOldDog/ecommerce-medusa-payload-nextjs"
                     target="_blank"
                     rel="noreferrer"
                     className="hover:text-gray-600 transition-colors"
