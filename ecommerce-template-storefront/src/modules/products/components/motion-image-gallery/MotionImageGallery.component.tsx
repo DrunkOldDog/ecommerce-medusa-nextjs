@@ -4,16 +4,19 @@ import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
 import { AnimatePresence, motion } from "motion/react"
 import { Button } from "@medusajs/ui"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
+
+import type { HttpTypes } from "@medusajs/types"
 
 type ImageGalleryProps = {
-  images: {
-    id: string
-    url: string
-    name: string
-  }[]
+  products: HttpTypes.StoreProduct[]
+  collectionHandle: string
 }
 
-const MotionImageGallery = ({ images }: ImageGalleryProps) => {
+const MotionImageGallery = ({
+  products,
+  collectionHandle,
+}: ImageGalleryProps) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
@@ -42,7 +45,7 @@ const MotionImageGallery = ({ images }: ImageGalleryProps) => {
 
     // Start new interval
     intervalRef.current = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length)
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length)
     }, 3000) // 3 seconds between transitions
   }
 
@@ -56,7 +59,7 @@ const MotionImageGallery = ({ images }: ImageGalleryProps) => {
         clearInterval(intervalRef.current)
       }
     }
-  }, [images.length])
+  }, [products.length])
 
   // Cleanup interval when component unmounts
   useEffect(() => {
@@ -84,12 +87,12 @@ const MotionImageGallery = ({ images }: ImageGalleryProps) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {images.map((image, index) => {
+      {products.map((product, index) => {
         const isActive = currentIndex === index
 
         return (
           <motion.div
-            key={image.id}
+            key={product.id}
             className="relative overflow-hidden bg-ui-bg-subtle"
             onClick={() => handleClick(index)}
             layout
@@ -117,7 +120,7 @@ const MotionImageGallery = ({ images }: ImageGalleryProps) => {
               }}
             >
               <Image
-                src={getImageUrl(image.url)}
+                src={getImageUrl(product.images?.[0]?.url || "")}
                 alt={`Product image ${index + 1}`}
                 fill
                 sizes="(max-width: 576px) 280px, (max-width: 768px) 360px, (max-width: 992px) 480px, 800px"
@@ -149,16 +152,22 @@ const MotionImageGallery = ({ images }: ImageGalleryProps) => {
                     }}
                     transition={{ duration: 0.6, delay: 0.2 }}
                   >
-                    <div className="text-white text-center space-y-4 max-w-sm">
+                    <div className="text-white text-center space-y-3 max-w-sm">
                       <div>
                         <h3 className="text-3xl font-bold leading-tight mb-1">
-                          {image.name}
+                          {product.title}
                         </h3>
-                        <p>Explore the collection</p>
+                        <p>{product.subtitle || "Explore the collection"}</p>
                       </div>
-                      <Button className="bg-white text-black shadow-sm hover:bg-white/90">
-                        Show Now
-                      </Button>
+
+                      <LocalizedClientLink
+                        href={`/collections/${collectionHandle}`}
+                        className="block"
+                      >
+                        <Button className="bg-white text-black shadow-sm hover:bg-white/90">
+                          Show Now
+                        </Button>
+                      </LocalizedClientLink>
                     </div>
                   </motion.div>
                 ) : (
@@ -179,7 +188,7 @@ const MotionImageGallery = ({ images }: ImageGalleryProps) => {
                         transform: "rotate(180deg)",
                       }}
                     >
-                      {image.name}
+                      {product.title}
                     </div>
                   </motion.div>
                 )}

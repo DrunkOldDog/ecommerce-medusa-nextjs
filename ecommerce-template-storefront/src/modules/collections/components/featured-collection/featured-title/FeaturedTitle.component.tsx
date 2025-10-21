@@ -8,7 +8,11 @@ const oswald = Oswald({
   weight: ["400", "500", "600", "700"],
 })
 
-export default function FeaturedTitle() {
+interface FeaturedTitleProps {
+  title: string
+}
+
+export default function FeaturedTitle({ title }: FeaturedTitleProps) {
   const scrollVariants = {
     loop: {
       x: ["100%", "-100%"],
@@ -37,7 +41,7 @@ export default function FeaturedTitle() {
             NEW
           </span>
           <span className="font-black uppercase tracking-tight text-gray-800">
-            CHANDAL COLLECTION
+            {title}
           </span>
         </div>
       ))}
