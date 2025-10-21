@@ -1,8 +1,12 @@
 import { Metadata } from "next"
 
-import FeaturedProducts from "@modules/home/components/featured-products"
+import FeaturedCollectionGrid from "@modules/home/components/featured-collection-grid"
 import Hero from "@modules/home/components/hero"
-import { listCollections } from "@lib/data/collections"
+import { getPayloadCollections } from "@lib/data/collections"
+import FeaturedCollection from "@modules/collections/components/featured-collection"
+import ProductCategories from "@modules/home/components/product-categories"
+import { getPayloadCategories } from "@lib/data/categories"
+import { PayloadCollection } from "types/collection.types"
 import { getRegion } from "@lib/data/regions"
 
 export const metadata: Metadata = {
@@ -15,26 +19,41 @@ export default async function Home(props: {
   params: Promise<{ countryCode: string }>
 }) {
   const params = await props.params
-
   const { countryCode } = params
 
   const region = await getRegion(countryCode)
+  const productCategories = await getPayloadCategories()
+  const payloadCollections = await getPayloadCollections()
 
-  const { collections } = await listCollections({
-    fields: "id, handle, title",
-  })
-
-  if (!collections || !region) {
-    return null
-  }
+  const { featuredCollection, collections } = payloadCollections.reduce(
+    (acc, collection) => {
+      if (collection.featured) {
+        acc.featuredCollection = collection
+      } else {
+        acc.collections.push(collection)
+      }
+      return acc
+    },
+    {
+      featuredCollection: {} as PayloadCollection,
+      collections: [] as PayloadCollection[],
+    }
+  )
 
   return (
     <>
-      <Hero />
-      <div className="py-12">
-        <ul className="flex flex-col gap-x-6">
-          <FeaturedProducts collections={collections} region={region} />
-        </ul>
+      <div className="-mt-16">
+        <Hero />
+      </div>
+
+      <div className="flex flex-col gap-y-16">
+        {region && (
+          <FeaturedCollection collection={featuredCollection} region={region} />
+        )}
+
+        <FeaturedCollectionGrid collections={collections} />
+
+        <ProductCategories categories={productCategories} />
       </div>
     </>
   )

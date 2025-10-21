@@ -17,6 +17,9 @@ services:
       AUTH_CORS: http://localhost:8000,http://localhost:3000
       JWT_SECRET: supersecret
       COOKIE_SECRET: supersecret
+      PAYLOAD_SERVER_URL: http://payload:3000
+      PAYLOAD_API_KEY: cc946fdd-35f9-4fb5-8a0d-3bb438cbeb2a
+      PAYLOAD_USER_COLLECTION: users
     networks:
       - ecommerce-network
     depends_on:
@@ -26,6 +29,27 @@ services:
       - "9000:9000"
     volumes:
       - ./ecommerce-template:/app
+      - /app/node_modules
+
+  # Payload CMS Service
+  payload:
+    build:
+      context: ./ecommerce-template-cms
+      dockerfile: Dockerfile
+    restart: always
+    container_name: medusa_cms
+    environment:
+      DATABASE_URI: postgres://postgres:postgres@database:5432/payload
+      PAYLOAD_SECRET: 2b464b4a36b3b3bb8c904a32
+      NODE_ENV: development
+    networks:
+      - ecommerce-network
+    depends_on:
+      - database
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./ecommerce-template-cms:/app
       - /app/node_modules
 
   # Next.js Storefront Service
@@ -39,11 +63,16 @@ services:
       NODE_ENV: development
       MEDUSA_BACKEND_URL: http://backend:9000
       NEXT_PUBLIC_BASE_URL: http://localhost:8000
+      NEXT_PUBLIC_BACKEND_CONTAINER_NAME: backend
       NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: pk_b69aa789bf1dce400713fe12689d6c55c23573ec26ed030931a03f7efc30d841
+      NEXT_PUBLIC_PAYLOAD_SERVER_URL: http://payload:3000
+      PAYLOAD_API_KEY: cc946fdd-35f9-4fb5-8a0d-3bb438cbeb2a
+      PAYLOAD_USER_COLLECTION: users
     networks:
       - ecommerce-network
     depends_on:
       - backend
+      - payload
     ports:
       - "8000:8000"
     volumes:

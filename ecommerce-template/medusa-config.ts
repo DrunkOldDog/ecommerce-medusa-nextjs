@@ -1,5 +1,4 @@
 import { loadEnv, defineConfig } from "@medusajs/framework/utils";
-import path from "node:path";
 
 loadEnv(process.env.NODE_ENV || "development", process.cwd());
 
@@ -7,6 +6,7 @@ module.exports = defineConfig({
   projectConfig: {
     redisUrl: process.env.REDIS_URL,
     databaseUrl: process.env.DATABASE_URL,
+    workerMode: "shared",
     http: {
       storeCors: process.env.STORE_CORS!,
       adminCors: process.env.ADMIN_CORS!,
@@ -19,26 +19,17 @@ module.exports = defineConfig({
       sslMode: "disable",
     },
   },
+  modules: [
+    {
+      resolve: "./src/modules/payload",
+      options: {
+        serverUrl: process.env.PAYLOAD_SERVER_URL || "http://localhost:3000",
+        apiKey: process.env.PAYLOAD_API_KEY,
+        userCollection: process.env.PAYLOAD_USER_COLLECTION || "users",
+      },
+    }
+  ],
   admin: {
-    // vite: (config) => ({
-    //   ...config,
-    //   resolve: {
-    //     ...config.resolve,
-    //     alias: [
-    //       {
-    //         find: "@medusajs/dashboard/css",
-    //         replacement: path.resolve(process.cwd(), "node_modules/@medusajs/dashboard/dist/app.css"),
-    //       },
-    //       {
-    //         find: "@medusajs/dashboard",
-    //         replacement: path.resolve(process.cwd(), "node_modules/@medusajs/dashboard/dist/app.mjs"),
-    //       },
-    //       {
-    //         find: "@medusajs/draft-order/admin",
-    //         replacement: path.resolve(process.cwd(), "node_modules/@medusajs/draft-order/.medusa/server/src/admin/index.mjs"),
-    //       }
-    //     ]
-    //   }
-    // }),
+    path: "/dashboard",
   },
 });

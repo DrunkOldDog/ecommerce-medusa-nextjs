@@ -1,4 +1,6 @@
-import { StorePrice } from "@medusajs/types"
+import type { StorePrice, StoreProduct } from "@medusajs/types"
+// @ts-ignore
+import type { SerializedEditorState } from "@payloadcms/richtext-lexical/lexical"
 
 export type FeaturedProduct = {
   id: string
@@ -21,4 +23,39 @@ export type StoreFreeShippingPrice = StorePrice & {
   target_reached: boolean
   target_remaining: number
   remaining_percentage: number
+}
+
+export type PayloadImage = {
+  id: number
+  url: string
+  thumbnailURL: string
+}
+
+export type PayloadImageItem = {
+  id: string
+  image: PayloadImage
+}
+
+export type StoreProductWithPayload = StoreProduct & {
+  payload_product?: {
+    medusa_id: string
+    title: string
+    handle: string
+    subtitle?: string
+    description?: SerializedEditorState
+    thumbnail?: PayloadImage
+    images: PayloadImageItem[]
+    options: {
+      medusa_id: string
+      title: string
+    }[]
+    variants: {
+      medusa_id: string
+      title: string
+      option_values: {
+        medusa_option_id: string
+        value: string
+      }[]
+    }[]
+  }
 }
