@@ -14,10 +14,10 @@ module.exports = defineConfig({
       jwtSecret: process.env.JWT_SECRET || "supersecret",
       cookieSecret: process.env.COOKIE_SECRET || "supersecret",
     },
-    databaseDriverOptions: {
-      ssl: false,
-      sslMode: "disable",
-    },
+    // databaseDriverOptions: {
+    //   ssl: false,
+    //   sslMode: "disable",
+    // },
   },
   modules: [
     {
@@ -27,7 +27,73 @@ module.exports = defineConfig({
         apiKey: process.env.PAYLOAD_API_KEY,
         userCollection: process.env.PAYLOAD_USER_COLLECTION || "users",
       },
-    }
+    },
+    ...(process.env.REDIS_URL
+      ? [
+          {
+            resolve: "@medusajs/medusa/cache-redis",
+            options: {
+              redisUrl: process.env.REDIS_URL,
+            },
+          },
+          {
+            resolve: "@medusajs/medusa/event-bus-redis",
+            options: {
+              redisUrl: process.env.REDIS_URL,
+            },
+          },
+          {
+            resolve: "@medusajs/medusa/workflow-engine-redis",
+            options: {
+              redis: {
+                url: process.env.REDIS_URL,
+              },
+            },
+          },
+        ]
+      : []),
+    ...(process.env.S3_BUCKET
+      ? [
+          {
+            resolve: "@medusajs/medusa/file",
+            options: {
+              providers: [
+                {
+                  resolve: "@medusajs/medusa/file-s3",
+                  id: "s3",
+                  options: {
+                    file_url: process.env.S3_FILE_URL,
+                    access_key_id: process.env.S3_ACCESS_KEY_ID,
+                    secret_access_key: process.env.S3_SECRET,
+                    region: "auto",
+                    bucket: process.env.S3_BUCKET,
+                    endpoint: process.env.S3_ENDPOINT,
+                    additional_client_config: {
+                      forcePathStyle: true,
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        ]
+      : []),
+    // No needed for now as we are using only one medusa instance
+    // {
+    //   resolve: "@medusajs/medusa/locking",
+    //   options: {
+    //     providers: [
+    //       {
+    //         resolve: "@medusajs/medusa/locking-redis",
+    //         id: "locking-redis",
+    //         is_default: true,
+    //         options: {
+    //           redisUrl: process.env.LOCKING_REDIS_URL,
+    //         },
+    //       },
+    //     ],
+    //   },
+    // },
   ],
   admin: {
     path: "/dashboard",
