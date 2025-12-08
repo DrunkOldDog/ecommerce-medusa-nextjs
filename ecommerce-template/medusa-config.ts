@@ -6,7 +6,8 @@ module.exports = defineConfig({
   projectConfig: {
     redisUrl: process.env.REDIS_URL,
     databaseUrl: process.env.DATABASE_URL,
-    workerMode: "shared",
+    workerMode:
+      (process.env.WORKER_MODE as "shared" | "worker" | "server") || "shared",
     http: {
       storeCors: process.env.STORE_CORS!,
       adminCors: process.env.ADMIN_CORS!,
@@ -18,6 +19,11 @@ module.exports = defineConfig({
     //   ssl: false,
     //   sslMode: "disable",
     // },
+  },
+  admin: {
+    path: "/dashboard",
+    disable: process.env.DISABLE_ADMIN === "true",
+    backendUrl: process.env.MEDUSA_BACKEND_URL || "http://localhost:9000",
   },
   modules: [
     {
@@ -95,7 +101,4 @@ module.exports = defineConfig({
     //   },
     // },
   ],
-  admin: {
-    path: "/dashboard",
-  },
 });
