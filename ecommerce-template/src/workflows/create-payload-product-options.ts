@@ -38,7 +38,7 @@ export const createPayloadProductOptionsWorkflow = createWorkflow(
         const items: Record<string, PayloadUpsertData> = {};
 
         data.productOptions.forEach((option) => {
-          const payloadProduct = // @ts-expect-error
+          const payloadProduct = // @ts-expect-error needed for extending product type
           option.product?.payload_product as PayloadCollectionItem;
           if (!payloadProduct) {
             return;
