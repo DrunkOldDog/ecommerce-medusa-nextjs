@@ -1,5 +1,6 @@
 import { createStep, StepResponse } from "@medusajs/framework/workflows-sdk";
 import { PAYLOAD_MODULE } from "../../modules/payload";
+import PayloadModuleService from "../../modules/payload/payload.service";
 
 type StepInput = {
   collection: string;
@@ -9,7 +10,7 @@ type StepInput = {
 export const retrievePayloadItemsStep = createStep(
   "retrieve-payload-items",
   async ({ where, collection }: StepInput, { container }) => {
-    const payloadModuleService = container.resolve(PAYLOAD_MODULE);
+    const payloadModuleService = container.resolve<PayloadModuleService>(PAYLOAD_MODULE);
 
     const items = await payloadModuleService.find(collection, {
       where,

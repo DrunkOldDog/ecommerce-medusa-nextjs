@@ -51,13 +51,13 @@ export const updatePayloadProductsWorkflow = createWorkflow(
           items: data.products
             .filter((product) => {
               const payloadProduct =
-                // @ts-expect-error
+                // @ts-ignore
                 product.payload_product as PayloadCollectionItem;
               return payloadProduct;
             })
             .map((product) => {
               const payloadProduct =
-                // @ts-expect-error
+                // @ts-ignore
                 product.payload_product as PayloadCollectionItem;
               return {
                 id: payloadProduct.id, // Use the Payload product ID

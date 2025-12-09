@@ -48,13 +48,13 @@ export const updatePayloadCategoriesWorkflow = createWorkflow(
           items: data.categories
             .filter((category) => {
               const payloadCategory =
-                // @ts-expect-error
+                // @ts-ignore
                 category.payload_category as PayloadCollectionItem;
               return payloadCategory;
             })
             .map((category) => {
               const payloadCategory =
-                // @ts-expect-error
+                // @ts-ignore
                 category.payload_category as PayloadCollectionItem;
               return {
                 id: payloadCategory.id, // Use the Payload category ID
