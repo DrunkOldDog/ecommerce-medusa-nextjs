@@ -57,6 +57,9 @@ importers:
       '@medusajs/test-utils':
         specifier: 2.10.3
         version: 2.10.3(@medusajs/framework@2.10.3(@medusajs/cli@2.10.3(@mikro-orm/core@6.4.3)(@mikro-orm/knex@6.4.3(@mikro-orm/core@6.4.3)(pg@8.16.3))(@mikro-orm/migrations@6.4.3(@mikro-orm/core@6.4.3)(@types/node@20.19.21)(pg@8.16.3))(@mikro-orm/postgresql@6.4.3(@mikro-orm/core@6.4.3))(@types/node@20.19.21)(awilix@8.0.1)(ioredis@5.8.1)(pg@8.16.3)(vite@5.4.20(@types/node@20.19.21)))(@mikro-orm/cli@6.4.3(pg@8.16.3))(@mikro-orm/core@6.4.3)(@mikro-orm/knex@6.4.3(@mikro-orm/core@6.4.3)(pg@8.16.3))(@mikro-orm/migrations@6.4.3(@mikro-orm/core@6.4.3)(@types/node@20.19.21)(pg@8.16.3))(@mikro-orm/postgresql@6.4.3(@mikro-orm/core@6.4.3))(awilix@8.0.1)(ioredis@5.8.1)(pg@8.16.3)(vite@5.4.20(@types/node@20.19.21)))(@medusajs/medusa@2.10.3)(@mikro-orm/postgresql@6.4.3(@mikro-orm/core@6.4.3))(awilix@8.0.1)
+      '@medusajs/types':
+        specifier: ^2.12.1
+        version: 2.12.1(ioredis@5.8.1)(vite@5.4.20(@types/node@20.19.21))
       '@mikro-orm/cli':
         specifier: 6.4.3
         version: 6.4.3(pg@8.16.3)
@@ -1453,6 +1456,18 @@ packages:
       awilix: ^8.0.1
       ioredis: ^5.4.1
       vite: ^5 || ^6
+    peerDependenciesMeta:
+      ioredis:
+        optional: true
+      vite:
+        optional: true
+
+  '@medusajs/types@2.12.1':
+    resolution: {integrity: sha512-IkdIQX+VqM2aiTm16DDge3Tzo61fkXRyv722Id9s5fPUcSIXJrMrKXlt3DJYIREMDKpMaOnt9SOg7BXSTVTMRA==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      ioredis: ^5.4.1
+      vite: ^5.4.21
     peerDependenciesMeta:
       ioredis:
         optional: true
@@ -8617,6 +8632,13 @@ snapshots:
   '@medusajs/types@2.10.3(awilix@8.0.1)(ioredis@5.8.1)(vite@5.4.20(@types/node@20.19.21))':
     dependencies:
       awilix: 8.0.1
+      bignumber.js: 9.3.1
+    optionalDependencies:
+      ioredis: 5.8.1
+      vite: 5.4.20(@types/node@20.19.21)
+
+  '@medusajs/types@2.12.1(ioredis@5.8.1)(vite@5.4.20(@types/node@20.19.21))':
+    dependencies:
       bignumber.js: 9.3.1
     optionalDependencies:
       ioredis: 5.8.1
