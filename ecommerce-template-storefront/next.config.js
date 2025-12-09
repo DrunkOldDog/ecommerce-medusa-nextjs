@@ -6,13 +6,15 @@ checkEnvVariables()
  * Medusa Cloud-related environment variables
  */
 const S3_HOSTNAME = process.env.MEDUSA_CLOUD_S3_HOSTNAME
-const S3_PATHNAME = process.env.MEDUSA_CLOUD_S3_PATHNAME
 const BACKEND_CONTAINER_NAME =
   process.env.NEXT_PUBLIC_BACKEND_CONTAINER_NAME || "backend"
 
-const PAYLOAD_SERVER_URL = (
-  process.env.NEXT_PUBLIC_PAYLOAD_SERVER_URL || "payload"
-).replace(/^https?:\/\/([^:]+):\d+$/, "$1") // Extract name from http://<NAME>:port pattern
+const payloadUrl =
+  process.env.NEXT_PUBLIC_PAYLOAD_SERVER_URL || "http://payload:3000"
+const payloadPattern = {
+  protocol: payloadUrl.startsWith("https") ? "https" : "http",
+  hostname: payloadUrl.split("://")[1].split(":")[0],
+}
 
 /**
  * @type {import('next').NextConfig}
@@ -32,6 +34,7 @@ const nextConfig = {
   },
   images: {
     remotePatterns: [
+      payloadPattern,
       {
         protocol: "http",
         hostname: "localhost",
@@ -39,10 +42,6 @@ const nextConfig = {
       {
         protocol: "http",
         hostname: BACKEND_CONTAINER_NAME,
-      },
-      {
-        protocol: "http",
-        hostname: PAYLOAD_SERVER_URL,
       },
       {
         protocol: "https",
@@ -56,12 +55,11 @@ const nextConfig = {
         protocol: "https",
         hostname: "medusa-server-testing.s3.us-east-1.amazonaws.com",
       },
-      ...(S3_HOSTNAME && S3_PATHNAME
+      ...(S3_HOSTNAME
         ? [
             {
               protocol: "https",
               hostname: S3_HOSTNAME,
-              pathname: S3_PATHNAME,
             },
           ]
         : []),
